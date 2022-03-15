@@ -18,7 +18,7 @@ export const ProjectListScreen=()=>{
         personId:""
     });
 
-    const debounceParam=useDebounce(param,2000);
+    const debounceParam=useDebounce(param,200);
 
     //状态
     const [list, setList]=useState([]);

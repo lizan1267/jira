@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 
 //专门判断0的
-export const isFalsy=(value)=>value === 0 ? false : !value ;
+export const isFalsy=(value:any)=>value === 0 ? false : !value ;
 
 //在一个函数里，改变传入的对象本身是不好的
-export const cleanObject=(object)=>{
+export const cleanObject=(object:object)=>{
     const result={...object}; //相当于 Object.assign({},object)
     Object.keys(result).forEach(key=>{
+        //@ts-ignore
         const value=result[key];
-        //0不删除
-        if(isFalsy(value)){
+        if(isFalsy(value)){  //0不删除
+            //@ts-ignore
             delete result[key];
         }
     })
@@ -17,27 +18,27 @@ export const cleanObject=(object)=>{
 };
 
 //自定义hook
-export const useMount=(callback)=>{
+export const useMount=(callback:()=>void)=>{
     useEffect(()=>{
         callback()
     },[])
 };
 
 // 封装debounce,就是去抖
-const debounce=(func,delay)=>{
-    let timeout;
-    return (...param)=>{
-        if(timeout){
-            clearTimeout(timeout);
-        }
-        timeout=setTimeout(function(){
-            func(...param);
-        },delay);
-    }
-}
+// const debounce=(func,delay)=>{
+//     let timeout;
+//     return (...param)=>{
+//         if(timeout){
+//             clearTimeout(timeout);
+//         }
+//         timeout=setTimeout(function(){
+//             func(...param);
+//         },delay);
+//     }
+// }
 
 //对上边封装的再一次精简
-export const useDebounce=(value,delay)=>{
+export const useDebounce=(value:any,delay?:number)=>{
     //定义一个内部变量debounceValue
     const [debounceValue,setDebounceValue]=useState(value);
     
