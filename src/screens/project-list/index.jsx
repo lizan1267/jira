@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import * as qs from 'qs';
-import { cleanObject } from 'utils';
+import { cleanObject, useDebounce, useMount } from 'utils';
 import { List } from './list';
 import { SearchPanel } from './search-panel';
 
@@ -18,26 +18,28 @@ export const ProjectListScreen=()=>{
         personId:""
     });
 
+    const debounceParam=useDebounce(param,2000);
+
     //状态
     const [list, setList]=useState([]);
 
     //搜索的时候去请求数据,获取list值
     useEffect(() => {
-        fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(async response=>{
+        fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`).then(async response=>{
             if(response.ok){ //请求成功
                 setList(await response.json())
             }
         })
-    }, [param]) //当param变化的时候去请求
+    }, [debounceParam]) //当param变化的时候去请求
 
     //初始化users
-    useEffect(()=>{
+    useMount(()=>{
       fetch(`${apiUrl}/users`).then(async response=>{
         if(response.ok){
           setUsers(await response.json());
         }
       })
-    },[])
+    })
 
   return (
     <div>

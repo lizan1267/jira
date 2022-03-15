@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 
 //专门判断0的
 export const isFalsy=(value)=>value === 0 ? false : !value ;
@@ -13,4 +14,41 @@ export const cleanObject=(object)=>{
         }
     })
     return result;
+};
+
+//自定义hook
+export const useMount=(callback)=>{
+    useEffect(()=>{
+        callback()
+    },[])
+};
+
+// 封装debounce,就是去抖
+const debounce=(func,delay)=>{
+    let timeout;
+    return (...param)=>{
+        if(timeout){
+            clearTimeout(timeout);
+        }
+        timeout=setTimeout(function(){
+            func(...param);
+        },delay);
+    }
+}
+
+//对上边封装的再一次精简
+export const useDebounce=(value,delay)=>{
+    //定义一个内部变量debounceValue
+    const [debounceValue,setDebounceValue]=useState(value);
+    
+    useEffect(()=>{
+        //在value和delay变化时，都去新设置一个定时器，去改变debounceValue的值
+        const timeout=setTimeout(()=>{
+            setDebounceValue(value)
+        },delay);
+        //每次在上一个useEffect处理完以后再运行，做一些处理性的工作
+        return ()=>clearTimeout(timeout);
+    },[value,delay]); 
+
+    return debounceValue;
 }
