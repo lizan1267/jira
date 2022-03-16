@@ -39,7 +39,7 @@ export const useMount=(callback:()=>void)=>{
 
 //对上边封装的再一次精简
 //后面用泛型来规范类型
-export const useDebounce=(value:unknown,delay?:number):any=>{
+export const useDebounce=<V>(value:V,delay?:number)=>{
     //定义一个内部变量debounceValue
     const [debounceValue,setDebounceValue]=useState(value);
     
