@@ -1,24 +1,11 @@
+import { useAuth } from 'context/auth-context';
 import React,{FormEvent} from 'react';
 
 const apiUrl=process.env.REACT_APP_API_URL;
 
 export const LoginScreen=()=>{
 
-    const login=(param:{username:string,password:string})=>{
-        //发送请求
-        fetch(`${apiUrl}/login`,{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(param)
-        }).then(
-            async (response:Response)=>{
-                if(response.ok){ //请求成功
-                    
-                }
-        })
-    }
+    const {login,user}=useAuth();
 
     //HTMLFormElement extends Element
     //表单提交

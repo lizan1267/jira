@@ -4,6 +4,7 @@ import * as qs from 'qs';
 import { cleanObject, useDebounce, useMount } from 'utils';
 import { List } from './list';
 import { SearchPanel } from './search-panel';
+import { useHttp } from 'utils/http';
 
 
 const apiUrl=process.env.REACT_APP_API_URL
@@ -23,22 +24,16 @@ export const ProjectListScreen=()=>{
     //状态
     const [list, setList]=useState([]);
 
+    const client=useHttp();
+
     //搜索的时候去请求数据,获取list值
     useEffect(() => {
-        fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`).then(async response=>{
-            if(response.ok){ //请求成功
-                setList(await response.json())
-            }
-        })
+      client('projects',{data:cleanObject(debounceParam)}).then(setList)
     }, [debounceParam]) //当param变化的时候去请求
 
     //初始化users
     useMount(()=>{
-      fetch(`${apiUrl}/users`).then(async response=>{
-        if(response.ok){
-          setUsers(await response.json());
-        }
-      })
+      client('users').then(setUsers)
     })
 
   return (
